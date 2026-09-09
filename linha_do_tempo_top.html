@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linha do Tempo do TOP — Legendários</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#f36a21; --orange2:#ff983f; --ink:#111315; --paper:#f7f6f3; --card:#fff; --muted:#6d7379; --line:#dfe2e4;
+    --bg:var(--paper); --accent:var(--orange); --accent-soft:#fff0e7; --ok:#1f8c62; --warn:#c68018; --seguranca:#c84b45;
+    --cond:'Barlow Condensed','Arial Narrow',Impact,sans-serif; --sans:'DM Sans',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:13.5px/1.45 var(--sans);color:var(--ink);background:var(--paper)}
+  button{font:inherit;cursor:pointer}
+  input,select,textarea{font:inherit;font-size:13px;color:#24282b;border:1px solid #d9dddf;border-radius:6px;padding:6px 8px;background:#fff}
+  input:focus,select:focus,textarea:focus{outline:2px solid #ffd2b8;border-color:var(--orange)}
+  textarea{resize:vertical;min-height:38px;width:100%}
+  .btn{border:0;border-radius:7px;padding:9px 13px;background:#eceeed;color:#34383c;font-weight:700;font-size:13px}
+  .btn:hover{background:#e2e5e4}
+  .btn.primary{background:var(--orange);color:#fff}
+  .btn.primary:hover{background:#d95a17}
+  .btn.small{padding:3px 8px;font-size:11px}
+  .btn.danger{color:var(--seguranca)}
+  .icon{border:none;background:none;padding:2px 5px;color:var(--muted);font-size:15px}
+  .icon:hover{color:var(--ink)}
+
+  /* ---------- hero + topbar ---------- */
+  .hero{color:#fff;min-height:150px;padding:26px clamp(22px,5vw,76px) 40px;background:linear-gradient(118deg,rgba(12,14,16,.96),rgba(20,23,25,.82)),radial-gradient(circle at 88% 0,#f36a21 0 2px,transparent 3px);background-color:#111315;background-size:auto,19px 19px;position:relative;overflow:hidden}
+  .hero:after{content:'';position:absolute;width:370px;height:370px;border:1px solid rgba(243,106,33,.5);border-radius:50%;right:-110px;top:-220px;box-shadow:0 0 0 42px rgba(243,106,33,.05),0 0 0 84px rgba(243,106,33,.04)}
+  .eyebrow{font-size:11px;letter-spacing:2px;color:var(--orange2);font-weight:700}
+  .hero h1{font:800 clamp(30px,4.5vw,50px)/.92 var(--cond);margin:8px 0 10px;letter-spacing:.5px;text-transform:uppercase}
+  .hero p{margin:0;color:#d8dcdf;max-width:660px;font-size:13.5px}
+  .wrap{max-width:1450px;margin:-24px auto 45px;padding:0 22px;position:relative}
+  .topbar{background:#fff;border-radius:12px;padding:12px 18px;box-shadow:0 10px 28px #12161916;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+  .topbar b{font:700 15px var(--cond);letter-spacing:.3px;text-transform:uppercase}
+  .save{font-size:12px;color:var(--ok);font-weight:700}
+  .topbar .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* ---------- layout ---------- */
+  .layout{display:grid;grid-template-columns:320px 1fr;gap:22px;margin-top:22px}
+  .panel,.route{background:var(--card);border:1px solid #e7e8e7;border-radius:12px}
+  .panel{padding:18px;align-self:start;position:sticky;top:14px;max-height:calc(100vh - 28px);overflow:auto}
+  .panel h2,.route h2{font:800 22px var(--cond);margin:0 0 12px;letter-spacing:.2px;text-transform:uppercase}
+  .section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+  .section:first-of-type{border:0;padding-top:0;margin-top:0}
+  .panel label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:var(--muted);margin:10px 0 5px}
+  .panel input,.panel select{width:100%}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .route{padding:24px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:22px}
+  .stat{background:#f5f6f5;border-radius:9px;padding:12px 14px;border-left:4px solid var(--orange)}
+  .stat b{display:block;font:800 25px/1 var(--cond);color:#222}
+  .stat span{font-size:10px;text-transform:uppercase;color:var(--muted);letter-spacing:.6px}
+  .hint{font-size:12px;color:var(--muted);line-height:1.55;margin:0 0 14px}
+
+  /* menu vira lista no painel */
+  #b-menu{display:none}
+  .menu{display:block}
+  .menu-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;color:var(--muted);margin:10px 0 4px}
+  .menu button{display:block;width:100%;text-align:left;border:1px solid #e7e8e7;background:#fafafa;padding:7px 10px;border-radius:6px;margin:3px 0;font-weight:600;font-size:12.5px}
+  .menu button:hover{background:#fff0e7;border-color:#ffd2b8}
+  .menu button.danger{color:var(--seguranca)}
+  .cad-list{margin:6px 0}
+  .cad-row{display:flex;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid #f0f1f0}
+  .cad-row input[type=text]{flex:1}
+  .cad-row input[type=color]{width:34px;height:28px;padding:1px;border:1px solid var(--line);border-radius:4px}
+  .cad-row .uso{font-size:11px;color:var(--muted);white-space:nowrap;min-width:60px;text-align:right}
+
+  /* ---------- day + timeline ---------- */
+  .day{display:flex;align-items:center;gap:10px;margin:22px 0 12px}
+  .day::after{content:'';height:1px;background:var(--line);flex:1}
+  .day span{font:800 17px var(--cond);letter-spacing:.4px;white-space:nowrap;text-transform:uppercase}
+  #lista{position:relative;padding-left:34px}
+  #lista:before{content:'';position:absolute;left:12px;top:14px;bottom:20px;width:2px;background:linear-gradient(var(--orange),#c7cccf)}
+  #lista .day{margin-left:-34px}
+  #lista .day span{background:var(--paper);padding:2px 8px;border-radius:6px;margin-left:0}
+
+  /* ---------- trecho ---------- */
+  .trecho{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:6px 0 8px;padding:8px 12px;border:1px dashed #cfd3d5;background:#f7f8f7;border-radius:8px;font-size:12px;color:var(--muted);position:relative}
+  .trecho:before{content:'↓';position:absolute;left:-30px;top:6px;width:18px;height:18px;border-radius:50%;background:#c7cccf;color:#fff;font-size:11px;display:grid;place-items:center}
+  .trecho .tlabel{font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.5px;font-size:10.5px}
+  .trecho .acum{margin-left:auto;font-size:11px}
+  .trecho b{color:var(--ink)}
+  .trecho input[type=number]{width:68px;padding:4px 6px}
+  .trecho input.obs{width:240px;padding:4px 6px}
+  .trecho .sug{color:var(--ok);font-size:11px}
+
+  /* ---------- parada card ---------- */
+  .card{position:relative;background:#fff;border:1px solid #e4e6e7;border-radius:10px;margin:0 0 12px;padding:14px 15px 13px;box-shadow:0 3px 9px #15191b08}
+  .card-head{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+  .num{width:25px;height:25px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font:800 14px var(--cond);position:absolute;left:-35px;top:15px;box-shadow:0 0 0 5px var(--paper)}
+  .card-head input.nome{font:700 16px var(--sans);width:300px}
+  .card-head input.local{width:220px}
+  .times{display:flex;gap:14px;align-items:baseline;margin-left:auto;white-space:nowrap}
+  .times .t{font:800 22px var(--cond);color:#25282a;font-variant-numeric:tabular-nums}
+  .times input.t-in{width:74px;padding:1px 4px;border:1px solid transparent;background:transparent;text-align:center;border-radius:6px}
+  .times input.t-in:hover{border-color:var(--line);background:#fff}
+  .times input.t-in.fixed{background:var(--accent-soft);border-color:#ffc9a3;color:#bd4e11}
+  .times .fixo{display:block;text-align:center;min-height:0}
+  .times small{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+  .times .tdata{font-size:11px;color:var(--muted);font-weight:700;margin-right:6px;align-self:center}
+  .dtag{background:var(--orange);color:#fff;border-radius:6px;padding:2px 10px;font:800 22px var(--cond)}
+  .dtag.sm{font-size:13px;padding:1px 7px;align-self:center;margin-right:2px}
+  #lista .day{background:#fff0e7;border:2px solid var(--orange);border-radius:8px;padding:6px 12px}
+  #lista .day::after{display:none}
+  #lista .day span:not(.dtag){background:none;font-size:19px;color:#bd4e11}
+  .dbadge{display:block;font:800 11px var(--cond);color:#fff;background:var(--orange);border-radius:4px;padding:1px 5px;margin-bottom:2px;white-space:nowrap;letter-spacing:.4px}
+  .lock{font-style:normal;font-size:10px}
+  input.h-in{width:58px;padding:2px 3px;text-align:center;border-color:transparent;background:transparent;font:800 15px var(--cond);color:#25282a;border-radius:5px}
+  input.h-in:hover{border-color:var(--line);background:#fff}
+  input.h-in.fixed{background:var(--accent-soft);border-color:#ffc9a3;color:#bd4e11}
+  .predsel{display:flex;flex-direction:column;gap:3px}
+  .predsel select,.predsel input{width:100%}
+  .actions{display:flex;gap:2px;margin-left:6px}
+
+  .section h4{margin:0 0 4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:700}
+  .card .section{border-top:1px solid #f0f1f0;padding-top:10px;margin-top:10px}
+  table{width:100%;border-collapse:collapse}
+  td,th{padding:3px 4px;vertical-align:top;text-align:left}
+  th{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+  td input,td select,td textarea{width:100%;padding:5px 7px}
+  td.n{width:64px;color:var(--muted);white-space:nowrap;padding-top:5px}
+  td.min{width:66px} td.km{width:64px} td.tipo{width:118px} td.pred{width:165px} td.del{width:52px;padding-top:6px;white-space:nowrap}
+  td.setor{width:150px}
+  .tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.4px;text-transform:uppercase}
+  .obs-parada{width:100%;margin-top:8px;min-height:30px}
+  .add-row{margin-top:4px}
+  tr.sub>td{padding:0 4px 8px;border-bottom:1px solid #f0f1f0}
+  .subset{margin:4px 0 0 0;width:100%}
+  .subset tr[data-ast]>td:first-child{border-left:4px solid var(--sc,#999);border-radius:4px 0 0 4px;background:#f8f8f7}
+  .subset tr[data-ast]>td{background:#f8f8f7}
+  .subset th{font-size:10px}
+  .sub-add{opacity:.7;font-size:11px;padding:2px 8px}
+  .sub-add:hover{opacity:1}
+  .add-parada{display:flex;justify-content:center;margin:14px 0 10px}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:20}
+  .modal.open{display:flex}
+  .modal .box{background:#fff;border-radius:12px;padding:20px;width:440px;max-width:92vw}
+  .modal h3{margin:0 0 10px;font:800 22px var(--cond);text-transform:uppercase}
+  .modal label{display:block;margin:8px 0;font-size:13px}
+  .modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+  .toast{position:fixed;right:24px;bottom:22px;background:#202426;color:#fff;padding:12px 16px;border-radius:8px;font-size:13px;box-shadow:0 8px 22px #0004;opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s}
+  .toast.show{opacity:1;transform:none}
+
+  /* ================= VISUALIZAÇÃO / IMPRESSÃO (estilo roteiro) ================= */
+  #print{display:none}
+  .pv-title{font:800 26px var(--cond);margin:0;text-transform:uppercase}
+  .pv-sub{font-size:12px;color:var(--muted);margin:2px 0 14px}
+  .pv-day{display:flex;align-items:center;gap:10px;margin:22px 0 12px;page-break-after:avoid}
+  .pv-day::after{content:'';height:1px;background:var(--line);flex:1}
+  .pv-day span{font:800 17px var(--cond);letter-spacing:.4px;text-transform:uppercase}
+  .pv-day small{font-size:11px;color:var(--muted);font-weight:700}
+  .pv-dtag{background:var(--orange);color:#fff;border-radius:6px;padding:2px 10px;font:800 22px var(--cond);letter-spacing:.5px}
+  .pv-dtag.sm{font-size:14px;padding:1px 7px;margin-right:6px;vertical-align:middle}
+  .pv-day{background:#fff0e7;border:2px solid var(--orange);border-radius:8px;padding:6px 12px;margin:18px 0 12px}
+  .pv-day::after{display:none}
+  .pv-day span:not(.pv-dtag){font-size:20px;color:#bd4e11}
+  .pv-day small{color:#bd4e11}
+  .pv-ativ .h em.dd{background:var(--orange);color:#fff;border-radius:4px;padding:0 5px;display:inline-block;margin-right:3px}
+  .pv-time small{font:700 11px var(--sans);color:var(--muted);letter-spacing:.3px}
+  .pv-ativ .h em{display:block;font:700 9.5px var(--sans);color:#bd4e11;font-style:normal;letter-spacing:.3px}
+  .pv-dturn{display:block!important;background:var(--orange);color:#fff;border-radius:6px;padding:6px 12px;margin:10px 0 6px;font:800 16px var(--cond);letter-spacing:.5px;border:0!important}
+  .pv-dturn .pv-dtag{background:#fff;color:#bd4e11;font-size:18px;padding:1px 9px;margin-right:8px}
+  .pv-tl{position:relative;padding-left:32px}
+  .pv-tl:before{content:'';position:absolute;left:12px;top:12px;bottom:20px;width:2px;background:linear-gradient(var(--orange),#c7cccf)}
+  .pv-trecho{position:relative;margin:0 0 8px;padding:6px 10px;border:1px dashed #cfd3d5;border-radius:8px;font-size:11.5px;color:#4d5559;background:#fafbfa}
+  .pv-trecho:before{content:'↓';position:absolute;left:-28px;top:5px;width:18px;height:18px;border-radius:50%;background:#c7cccf;color:#fff;font-size:11px;display:grid;place-items:center;box-shadow:0 0 0 4px #fff}
+  .pv-stop{position:relative;border:1px solid #e4e6e7;border-radius:10px;margin-bottom:12px;padding:12px 14px 11px;background:#fff;page-break-inside:avoid}
+  .pv-marker{width:25px;height:25px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font:800 14px var(--cond);position:absolute;left:-33px;top:13px;box-shadow:0 0 0 5px #fff}
+  .pv-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .pv-time{font:800 22px var(--cond);color:#25282a;white-space:nowrap}
+  .pv-name{font:700 15px var(--sans);margin:0}
+  .pv-local{font-size:12px;color:var(--muted)}
+  .pv-obs{font-size:11.5px;color:#61686c;margin:4px 0 0;line-height:1.5}
+  .pv-ativ{margin:8px 0 0;padding:0;list-style:none}
+  .pv-ativ li{display:grid;grid-template-columns:82px 1fr;gap:2px 10px;padding:6px 0;border-top:1px solid #f0f1f0}
+  .pv-ativ .h{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:5px;align-items:baseline}
+  .pv-ativ .h em.dd{grid-column:1;grid-row:1;margin:0;align-self:center}
+  .pv-ativ .h .hh{grid-column:2;grid-row:1}
+  .pv-ativ .h small{grid-column:1/-1;grid-row:2}
+  .pv-ativ .h em:not(.dd){grid-column:1/-1;grid-row:3}
+  .pv-ativ .h.nod{grid-template-columns:1fr}
+  .pv-ativ .h.nod .hh{grid-column:1}
+  .pv-ativ .h{font:800 15px var(--cond);color:#25282a}
+  .pv-ativ .h small{display:block;font:600 10px var(--sans);color:var(--muted)}
+  .pv-ativ .lab{font-size:12.5px}
+  .pv-ativ .lab b{font-size:12.5px}
+  .pv-tag{font-size:9.5px;letter-spacing:.4px;border-radius:99px;padding:2px 7px;text-transform:uppercase;font-weight:700;background:#f1f2f1;color:#4d5559;vertical-align:middle;margin-right:4px}
+  .pv-tag.word{background:#f1ecfa;color:#6741aa}.pv-tag.meal{background:#e8f5ef;color:#167151}.pv-tag.walk{background:#fff0e7;color:#bd4e11}.pv-tag.alert{background:#f9ebeb;color:#ad3b36}.pv-tag.sleep{background:#e9f2fa;color:#206393}
+  .pv-assign{display:grid;gap:5px;margin-top:6px;grid-column:2;grid-template-columns:1fr 1fr}
+  .pv-assign .pv-a:only-child{grid-column:1/-1}
+  .pv-a{border-left:4px solid var(--sc,#999);background:#f8f8f7;padding:6px 9px;border-radius:0 6px 6px 0;font-size:11.5px;line-height:1.45}
+  .pv-a b{font-size:10px;letter-spacing:.5px;text-transform:uppercase}
+  .pv-a .pos{color:#4d5559}
+  .pv-a .pos b{color:#4d5559}
+  .pv-stopset{margin-top:8px}
+  .pv-stopset .cap{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700;margin-bottom:4px}
+  .p-resumo table{width:100%;border-collapse:collapse;font-size:12px}
+  .p-resumo th,.p-resumo td{border:1px solid #dfe2e4;padding:4px 6px;text-align:left}
+  .p-resumo th{background:#f1f2f1;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
+  .p-foot{display:none}
+
+  body.preview #print{display:block}
+  body.preview #lista,body.preview .add-parada,body.preview .stats{display:none}
+
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.panel{position:static;max-height:none}.stats{grid-template-columns:1fr 1fr}}
+  @media print{
+    @page{size:A4 landscape;margin:8mm 9mm 9mm}
+    body{background:#fff;font-size:10.5px;line-height:1.3}
+    .hero,.topbar,.panel,.stats,#lista,.add-parada,.modal,.toast{display:none!important}
+    .wrap{margin:0;padding:0;max-width:none}.layout{display:block;margin:0}.route{border:0;padding:0;border-radius:0}
+    #print{display:block}
+    .pv-title{font-size:18px}.pv-sub{font-size:9.5px;margin:0 0 6px}
+    /* duas colunas por página */
+    .pv-day{margin:6px 0 4px;break-after:avoid;column-span:none}
+    .pv-day span{font-size:13px}.pv-day small{font-size:9px}
+    .pv-tl{padding-left:20px}
+    .pv-tl:before{left:7px;top:8px;bottom:10px;width:1.5px;background:#c7cccf}
+    .pv-trecho{margin:0 0 4px;padding:2px 6px;font-size:9px;border-radius:5px;break-inside:avoid}
+    .pv-trecho:before{left:-18px;top:2px;width:13px;height:13px;font-size:9px;box-shadow:0 0 0 3px #fff}
+    .pv-stop{padding:5px 7px 4px;margin-bottom:5px;border-radius:6px;box-shadow:none;break-inside:auto}
+    .pv-marker{width:17px;height:17px;font-size:10px;left:-22px;top:6px;box-shadow:0 0 0 3px #fff}
+    .pv-head{gap:6px;break-after:avoid}
+    .pv-time{font-size:14px}.pv-name{font-size:11px}.pv-local{font-size:9px}
+    .pv-time small{font-size:9px}.pv-dtag{font-size:16px;padding:1px 8px}.pv-dtag.sm{font-size:11px;padding:0 5px}.pv-day{padding:3px 8px;margin:8px 0 6px}.pv-day span:not(.pv-dtag){font-size:14px}.pv-dturn{font-size:12px;padding:3px 8px;margin:5px 0 3px}.pv-dturn .pv-dtag{font-size:13px}.pv-ativ .h em{font-size:8px}
+    .pv-day,.pv-dturn,.pv-dtag,.pv-ativ .h em.dd{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .pv-obs{font-size:9px;margin-top:2px}
+    .pv-ativ{margin-top:3px}
+    .pv-ativ li{gap:1px 6px;padding:2px 0;break-inside:avoid}
+    .pv-ativ .h{font-size:11px}.pv-ativ .h small{font-size:8px}
+    .pv-ativ .lab,.pv-ativ .lab b{font-size:10.2px}
+    .pv-tag{font-size:7.5px;padding:1px 5px}
+    .pv-assign{grid-template-columns:1fr 1fr;gap:2px 8px;margin-top:2px}
+    .pv-assign .pv-a:only-child{grid-column:1/-1}
+    .pv-ativ li{grid-template-columns:66px 1fr}
+    .pv-a{display:grid;grid-template-columns:82px 1fr;gap:0 6px;padding:2px 6px;font-size:9.5px;line-height:1.3;border-left-width:3px;border-radius:0 4px 4px 0}
+    .pv-a>b{font-size:9px;align-self:start}
+    .pv-a>br{display:none}
+    .pv-a .pos{grid-column:2;font-size:9.2px}
+    .pv-stopset{margin-top:3px}.pv-stopset .cap{font-size:8px;margin-bottom:2px}
+    .pv-marker,.pv-a,.pv-tag,.pv-trecho{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .p-resumo table{font-size:10px}.p-resumo th,.p-resumo td{padding:2px 5px}
+    .p-foot{display:block;position:fixed;bottom:0;left:0;right:0;font-size:8px;color:#666;text-align:right}
+  }
+  body.embutida .hero{display:none} body.embutida .wrap{margin-top:16px}
+</style>
+</head>
+<body>
+<script>try{if(window.parent!==window&&typeof window.parent.lgndTimelineGet==='function'){document.body.className+=' embutida';window.addEventListener('DOMContentLoaded',()=>{const s=document.getElementById('tb-save');if(s)s.textContent='● Salva junto com o projeto no sistema Missão Revolução';});}}catch(e){}</script>
+
+<header class="hero">
+  <div class="eyebrow">LEGENDÁRIOS • PLANEJAMENTO OPERACIONAL</div>
+  <h1>Linha do Tempo do TOP</h1>
+  <p>Paradas, trechos, horários em cascata, prédicas e o que cada setor faz em cada momento. Edite à vontade; no final, imprima o roteiro.</p>
+</header>
+<main class="wrap">
+  <div class="topbar">
+    <div><b id="tb-nome">—</b><div class="save" id="tb-save">● Alterações salvas automaticamente neste navegador — exporte um .json antes de fechar</div></div>
+    <div class="acts">
+      <button class="btn" id="b-preview">Visualizar roteiro</button>
+      <button class="btn" id="b-print-pred">Resumo de prédicas</button>
+      <button class="btn primary" id="b-print">Imprimir linha do tempo</button>
+    </div>
+  </div>
+  <div class="layout">
+    <aside class="panel">
+      <div class="section">
+        <h2>Configurar o TOP</h2>
+        <label>Nome do TOP</label><input type="text" id="m-nome">
+        <div class="grid2">
+          <div><label>Data de início</label><input type="date" id="m-data"></div>
+          <div><label>Hora de início</label><input type="time" id="m-hora"></div>
+        </div>
+        <div class="grid2">
+          <div><label title="Ritmo médio das famílias em terreno plano">Ritmo a pé (km/h)</label><input type="number" id="m-ritmo" step="0.1" min="0.5"></div>
+          <div><label title="Minutos extras a cada 100 m de subida">+ min / 100 m ↑</label><input type="number" id="m-aclive" step="1" min="0"></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="menu-wrap"><button class="btn" id="b-menu">☰ Menu</button>
+        <div class="menu" id="menu">
+        <div class="menu-title">Cadastros</div>
+        <button data-m="cad-predicantes">Predicantes</button>
+        <button data-m="cad-setores">Setores</button>
+        <button data-m="cad-tiposAtiv">Tipos de atividade</button>
+        <button data-m="cad-tiposParada">Tipos de parada</button>
+        <div class="menu-title">Arquivo</div>
+        <button data-m="export">Exportar (.json)</button>
+        <button data-m="import">Importar (.json)</button>
+        <div class="menu-title">Linha do tempo</div>
+        <button data-m="seed">Carregar exemplo TOP RS 0426</button>
+        <button data-m="clear" class="danger">Começar em branco</button>
+      </div>
+        </div>
+      </div>
+      <div class="section">
+        <h2>Como usar</h2>
+        <p class="hint">Chegada = saída da parada anterior + tempo do trecho; saída = chegada + soma das durações. Para fixar um horário, clique na hora e digite; apague para voltar ao automático. Cada atividade pode ter setores com "o que faz" e posicionamento. <b>Dias do TOP:</b> D0 começa na hora de início; cada atividade do tipo "Alvorada" inicia o D seguinte (D1, D2, D3).</p>
+      </div>
+    </aside>
+    <section class="route">
+      <div class="stats">
+        <div class="stat"><b id="st-km">—</b><span>Distância total</span></div>
+        <div class="stat"><b id="st-paradas">—</b><span>Paradas</span></div>
+        <div class="stat"><b id="st-pred">—</b><span>Prédicas</span></div>
+        <div class="stat"><b id="st-fim">—</b><span>Término previsto</span></div>
+      </div>
+      <span id="totals" hidden></span>
+      <div id="lista"></div>
+      <div class="add-parada"><button class="btn primary" id="b-add">+ Adicionar parada</button></div>
+      <div id="print"></div>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="modal-print">
+  <div class="box">
+    <h3>Imprimir</h3>
+    <label>Setor <select id="p-setor"><option value="">Todos os setores (linha do tempo completa)</option></select></label>
+    <label><input type="checkbox" id="p-obs" checked> Incluir observações das paradas</label>
+    <p class="hint" style="margin:8px 0 0">Ao filtrar por setor, saem todas as paradas e horários, mas só as tarefas daquele setor. Sem filtro, sai tudo.</p>
+    <div class="row"><button class="btn" id="p-cancel">Cancelar</button><button class="btn primary" id="p-go">Gerar</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-cad">
+  <div class="box" style="width:560px">
+    <h3 id="cad-title">Cadastro</h3>
+    <p class="hint" id="cad-hint"></p>
+    <div class="cad-list" id="cad-list"></div>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn" id="cad-add">+ Novo</button>
+      <button class="btn primary" id="cad-close">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="file" accept="application/json" hidden>
+<button id="b-export-hidden" hidden></button><button id="b-import" hidden></button>
+
+<script src="linha_do_tempo_dados.js"></script>
+<script>
+/* ============================================================
+   MODELO
+   parada: {id, nome, local, tipo, obs, fixo:'HH:MM'|'', trecho:{km,aclive,modal,min,obs}, atividades:[], setores:[]}
+   atividade: {id, tipo, nome, predicante, tema, min}
+   setor: {id, setor, faz, pos}
+   ============================================================ */
+const DEF_SETORES = [['VOZ','#1f5fa8'],['EVENTOS','#7a3fa0'],['SEGURANÇA','#b23a3a'],['LOGÍSTICA','#b26a00'],['PREDICANTES','#2f6b3a'],['COZINHA','#a0526b'],['HAKUNA','#0f7c8c'],['PATRON','#333333'],['CHEFES/SUB','#5c5c8a'],['TODOS OS LGND','#6b6660'],['MÍDIA','#8a6d3b']].map(x=>({nome:x[0],cor:x[1]}));
+const DEF_TIPOS_PARADA = ['Base','Prédica','Acampamento','Refeição','Embarque','Trilha','Outro'];
+const DEF_TIPOS_ATIV = ['Prédica','Vistoria','Refeição','Dormir','Alvorada','Embarque','Dinâmica','Oração','Entrega','Formação','Outro'];
+const DEF_PREDICANTES = ['Pr Romulo','Pr. Ailton','Tiago Pistoia','Alan Rieger','Cleryston','Luiz Maciel','Ricardo Lebedenco','Isaac Lebedenco','Cláudio Stormowski','Diego Cunha','Marcos Macedo','Jackson','Pr. Odair','Cristian Cebey','Lucas Harter','Fernando Colle','Romulo Lobo'];
+function defCadastros(){ return {setores:JSON.parse(JSON.stringify(DEF_SETORES)),tiposParada:DEF_TIPOS_PARADA.slice(),tiposAtiv:DEF_TIPOS_ATIV.slice(),predicantes:DEF_PREDICANTES.slice()}; }
+const PRED = () => state.cadastros.predicantes;
+const SET = () => state.cadastros.setores.map(x=>x.nome);
+const COR = new Proxy({}, {get:(_,k)=>{ const x=state.cadastros.setores.find(y=>y.nome===k); return x?x.cor:'#777'; }});
+const TP = () => state.cadastros.tiposParada;
+const TA = () => state.cadastros.tiposAtiv;
+const DIAS = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+const KEY = 'lgnd-linha-do-tempo-v1';
+// Integração com o sistema Missão Revolução: dentro da Gestão do TOP, grava no projeto (e sincroniza online); sozinha, usa o localStorage.
+const EMBUTIDA = (() => { try { return window.parent !== window && typeof window.parent.lgndTimelineGet === 'function'; } catch (e) { return false; } })();
+
+const uid = () => Math.random().toString(36).slice(2,9);
+let state = migrate(load() || seed());
+
+function novaParada(){ return {id:uid(),nome:'',local:'',tipo:'Prédica',obs:'',fixo:'',trecho:{km:'',aclive:'',modal:'pe',min:'',obs:''},atividades:[],setores:[]}; }
+function novaAtiv(){ return {id:uid(),tipo:'Outro',nome:'',predicante:'',tema:'',min:'',km:'',setores:[]}; }
+function novoSetor(){ return {id:uid(),setor:SET()[0]||'',faz:'',pos:''}; }
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} if (EMBUTIDA) { try { window.parent.lgndTimelineSet(JSON.parse(JSON.stringify(state))); } catch (e) {} } }
+function migrate(d){ if(d&&!d.cadastros) d.cadastros=defCadastros(); if(d&&d.cadastros&&!d.cadastros.predicantes) d.cadastros.predicantes=DEF_PREDICANTES.slice(); if(d&&d.paradas) d.paradas.forEach(p=>{ p.setores=p.setores||[]; p.atividades=p.atividades||[]; p.atividades.forEach(a=>{ a.setores=a.setores||[]; if(a.km==null) a.km=''; }); }); return d; }
+function INICIAL() { return window.LGND_DADOS_INICIAIS ? migrate(JSON.parse(JSON.stringify(window.LGND_DADOS_INICIAIS))) : null; }
+function load(){ if (EMBUTIDA) { try { const d = window.parent.lgndTimelineGet(); if (d) return migrate(JSON.parse(JSON.stringify(d))); const ini = INICIAL(); if (ini) { try { window.parent.lgndTimelineSet(JSON.parse(JSON.stringify(ini))); } catch (e) {} return ini; } } catch (e) {} } try{ const s=localStorage.getItem(KEY); if (s) return migrate(JSON.parse(s)); }catch(e){} return INICIAL(); }
+
+/* ============================================================
+   CÁLCULO
+   ============================================================ */
+function num(v){ const n=parseFloat(String(v).replace(',','.')); return isNaN(n)?0:n; }
+function sugerirMin(t){ const km=num(t.km), ac=num(t.aclive); if(!km) return 0; const r=num(state.meta.ritmo)||2.5; return Math.round(km/r*60 + ac/100*(num(state.meta.aclive)||0)); }
+function fmtH(d){ return d.toTimeString().slice(0,5); }
+function fmtDia(d){ return DIAS[d.getDay()]+' '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'); }
+const DIAS_LONGO=['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+function fmtDiaLongo(d){ return DIAS_LONGO[d.getDay()]+' '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'); }
+function fmtData(d){ return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'); }
+function mesmoDia(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function fmtDur(m){ m=Math.round(m); if(m<60) return m+"'"; const h=Math.floor(m/60), r=m%60; return r? h+'h'+String(r).padStart(2,'0') : h+'h'; }
+function fmtKm(k){ return num(k).toFixed(1).replace('.',',')+' km'; }
+
+function horaOk(v){ return !!v && /^\d{1,2}:\d{2}$/.test(v) && +v.split(':')[0]<24 && +v.split(':')[1]<60; }
+/* devolve o horário fixo mais próximo do calculado (evita pular um dia) e a folga: >0 sobra tempo, <0 atrasado */
+function fixar(t,hhmm){ const [h,m]=hhmm.split(':').map(Number); let f=new Date(t); f.setHours(h,m,0,0); if(f-t>12*3600000) f=new Date(f-86400000); if(t-f>12*3600000) f=new Date(f.getTime()+86400000); return {f, folga:Math.round((f-t)/60000)}; }
+function normHora(v){ v=String(v||'').trim().replace(/[hH]/,':'); if(/^\d{1,2}$/.test(v)) v=v+':00'; if(/^\d{3,4}$/.test(v)) v=v.slice(0,-2)+':'+v.slice(-2); if(horaOk(v)){ const [h,m]=v.split(':'); return String(+h).padStart(2,'0')+':'+m; } return ''; }
+function calcular(){
+  const ini = new Date(state.meta.inicio || '2026-01-01T14:00');
+  let t = new Date(ini);
+  let totKm=0, totMin=0, nPred=0, D=0;
+  state.paradas.forEach((p,i)=>{
+    p._D=D;
+    let folga = null;
+    if(i>0){ t = new Date(t.getTime() + num(p.trecho.min)*60000); totKm += num(p.trecho.km); totMin += num(p.trecho.min); }
+    if(horaOk(p.fixo)){ const r=fixar(t,p.fixo); folga=r.folga; t=r.f; }
+    p._chegada = new Date(t);
+    p._folga = folga;
+    p._kmAcum = totKm;
+    p.atividades.forEach(a=>{ a._folga=null; if(horaOk(a.fixo)){ const r=fixar(t,a.fixo); a._folga=r.folga; t=r.f; } a._inicio=new Date(t); if(a.tipo==='Alvorada'){ D++; a._viraD=true; } a._D=D; t=new Date(t.getTime()+num(a.min)*60000); totKm+=num(a.km); a._kmAcum=totKm; if(a.tipo==='Prédica'){ nPred++; a._n=nPred; } });
+    p._saida = new Date(t);
+  });
+  state._totKm=totKm; state._totMin=totMin; state._nPred=nPred;
+}
+
+/* ============================================================
+   RENDER (editor)
+   ============================================================ */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* caixa de seleção de predicante: lista do cadastro + opção de digitar */
+function predSel(attr,val){ const lista=PRED(); const naLista=lista.includes(val); const outro=val&&!naLista; return `<span class="predsel"><select ${attr.replace('data-','data-psel-')}><option value="">— selecionar —</option>${lista.map(n=>`<option ${n===val?'selected':''}>${esc(n)}</option>`).join('')}<option value="__outro__" ${outro?'selected':''}>Outro (digitar)</option></select><input ${attr} value="${esc(val)}" placeholder="digite o nome" ${outro?'':'hidden'}></span>`; }
+function opts(list,val){ return list.map(o=>`<option ${o===val?'selected':''}>${esc(o)}</option>`).join(''); }
+
+function renderMeta(){
+  $('#m-nome').value=state.meta.nome||''; const ini=(state.meta.inicio||'').split('T'); $('#m-data').value=ini[0]||''; $('#m-hora').value=(ini[1]||'14:00').slice(0,5);
+  $('#m-ritmo').value=state.meta.ritmo??2.5; $('#m-aclive').value=state.meta.aclive??10;
+}
+
+function render(){
+  calcular();
+  const L=$('#lista'); let html=''; let diaAtual='';
+  state.paradas.forEach((p,i)=>{
+    const dia='D'+p._D+' · '+fmtDiaLongo(p._chegada);
+    if(p._D!==diaAtual){ const viradoAntes = i>0 && state.paradas[i-1].atividades.some(a=>a._viraD&&a._D===p._D); diaAtual=p._D; if(!viradoAntes) html+=`<div class="day"><span class="dtag">D${p._D}</span><span>${fmtDiaLongo(p._chegada)}${p._D===0?' — até dormirem':' — a partir da alvorada'}</span></div>`; }
+    if(i>0){
+      const t=p.trecho, sug=sugerirMin(t);
+      html+=`<div class="trecho" data-p="${p.id}">
+        <span class="tlabel">↓ Da parada anterior até aqui:</span>
+        <label><b>Distância (km)</b> <input type="number" step="0.01" min="0" data-t="km" value="${esc(t.km)}" placeholder="0,0"></label>
+        <label>subida (m) <input type="number" step="1" min="0" data-t="aclive" value="${esc(t.aclive)}"></label>
+        <label><select data-t="modal"><option value="pe" ${t.modal==='pe'?'selected':''}>a pé</option><option value="caminhao" ${t.modal==='caminhao'?'selected':''}>caminhão</option><option value="outro" ${t.modal==='outro'?'selected':''}>outro</option></select></label>
+        <label><b>Tempo (min)</b> <input type="number" step="1" min="0" data-t="min" value="${esc(t.min)}"></label>
+        ${t.modal==='pe'&&sug?`<button class="btn small sug" data-sug="${sug}" title="Calculado pelo ritmo e subida">sugerir ${fmtDur(sug)}</button>`:''}
+        <label>obs <input type="text" class="obs" data-t="obs" value="${esc(t.obs)}" placeholder="link do mapa, ponto de embarque..."></label>
+        <span class="acum">acumulado ${fmtKm(p._kmAcum)}</span>
+      </div>`;
+    }
+    html+=`<div class="card" data-p="${p.id}">
+      <div class="card-head">
+        <span class="num">${i+1}</span>
+        <input class="nome" data-f="nome" value="${esc(p.nome)}" placeholder="Nome da parada">
+        <input class="local" data-f="local" value="${esc(p.local)}" placeholder="Local / referência">
+        <select data-f="tipo">${opts(TP(),p.tipo)}</select>
+        <div class="times">
+          <span class="dtag sm">D${p._D}</span><span class="tdata">${fmtDia(p._chegada)}</span>
+          <span><small>Chegada ${p.fixo?'<b class="lock" title="hora fixada por você">🔒</b>':'<i>(auto)</i>'}</small><input class="t t-in ${p.fixo?'fixed':''}" data-f="fixo" value="${esc(p.fixo||fmtH(p._chegada))}" title="Digite uma hora para fixar a chegada. Apague para voltar ao cálculo automático."></span>
+          <span><small>Saída</small><span class="t">${fmtH(p._saida)}</span></span>
+        </div>
+        <div class="actions">
+          <button class="icon" data-a="up" title="Subir">▲</button>
+          <button class="icon" data-a="down" title="Descer">▼</button>
+          <button class="icon" data-a="dup" title="Duplicar">⧉</button>
+          <button class="icon" data-a="del" title="Excluir">✕</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h4>O que acontece aqui</h4>
+        <table><thead><tr><th>Hora</th><th>Km</th><th>Tipo</th><th>Atividade</th><th>Predicante / Responsável</th><th>Tema / Detalhe</th><th>Min</th><th></th></tr></thead><tbody>
+        ${p.atividades.map(a=>`<tr data-at="${a.id}">
+          <td class="n">${a._viraD?`<span class="dbadge">D${a._D} · ${fmtDia(a._inicio)}</span>`:''}<input class="h-in ${a.fixo?'fixed':''}" data-af="fixo" value="${esc(a.fixo||fmtH(a._inicio))}" title="Digite uma hora para fixar o início desta atividade. Apague para voltar ao automático."></td>
+          <td class="km"><input type="number" step="0.01" min="0" data-af="km" value="${esc(a.km)}" placeholder="0,0" title="Distância percorrida nesta atividade (km)"></td>
+          <td class="tipo"><select data-af="tipo">${opts(TA(),a.tipo)}</select></td>
+          <td><input data-af="nome" value="${esc(a.nome)}" placeholder="${a.tipo==='Prédica'?'Prédica '+a._n:'Descrição'}"></td>
+          <td class="pred">${a.tipo==='Prédica'?predSel('data-af="predicante"',a.predicante):`<input data-af="predicante" value="${esc(a.predicante)}" placeholder="responsável">`}</td>
+          <td><input data-af="tema" value="${esc(a.tema)}" placeholder="${a.tipo==='Prédica'?'TEMA DA PRÉDICA':'detalhe'}"></td>
+          <td class="min"><input type="number" min="0" step="5" data-af="min" value="${esc(a.min)}"></td>
+          <td class="del"><button class="icon" data-a="dupAt" title="Duplicar atividade (com seus setores)">⧉</button><button class="icon" data-a="delAt" title="Excluir">✕</button></td>
+        </tr>
+        <tr class="sub" data-at="${a.id}"><td></td><td colspan="7">
+          ${a.setores.length?`<table class="subset"><thead><tr><th>Setor</th><th>O que faz neste horário</th><th>Posicionamento</th><th></th></tr></thead><tbody>
+          ${a.setores.map(s=>`<tr data-ast="${s.id}" style="--sc:${COR[s.setor]||'#999'}">
+            <td class="setor"><span class="tag" style="background:${COR[s.setor]||'#777'}">${esc(s.setor)}</span><select data-sf="setor" style="margin-top:3px">${opts(SET(),s.setor)}</select>${s.setor==='PREDICANTES'?'<div style="margin-top:3px">'+predSel('data-sf="quem"',s.quem||'')+'</div>':''}</td>
+            <td><textarea data-sf="faz" placeholder="o que o setor faz neste horário">${esc(s.faz)}</textarea></td>
+            <td style="width:32%"><textarea data-sf="pos" placeholder="onde cada um fica">${esc(s.pos)}</textarea></td>
+            <td class="del"><button class="icon" data-a="dupAst" title="Duplicar">⧉</button><button class="icon" data-a="delAst" title="Excluir">✕</button></td>
+          </tr>`).join('')}</tbody></table>`:''}
+          <button class="btn small add-row sub-add" data-a="addAst">+ setor neste horário</button>
+        </td></tr>`).join('')}
+        </tbody></table>
+        <button class="btn small add-row" data-a="addAt">+ atividade</button>
+      </div>
+
+      <div class="section">
+        <h4>Setores na parada em geral (valem para a parada inteira)</h4>
+        <table><thead><tr><th>Setor</th><th>O que faz</th><th>Posicionamento</th><th></th></tr></thead><tbody>
+        ${p.setores.map(s=>`<tr data-st="${s.id}">
+          <td class="setor"><span class="tag" style="background:${COR[s.setor]||'#777'}">${esc(s.setor)}</span><select data-sf="setor" style="margin-top:3px">${opts(SET(),s.setor)}</select>${s.setor==='PREDICANTES'?'<div style="margin-top:3px">'+predSel('data-sf="quem"',s.quem||'')+'</div>':''}</td>
+          <td><textarea data-sf="faz" placeholder="o que o setor faz nesta parada">${esc(s.faz)}</textarea></td>
+          <td style="width:32%"><textarea data-sf="pos" placeholder="onde cada um fica">${esc(s.pos)}</textarea></td>
+          <td class="del"><button class="icon" data-a="dupSt" title="Duplicar">⧉</button><button class="icon" data-a="delSt" title="Excluir">✕</button></td>
+        </tr>`).join('')}
+        </tbody></table>
+        <button class="btn small add-row" data-a="addSt">+ setor</button>
+      </div>
+
+      <textarea class="obs-parada" data-f="obs" placeholder="Observações gerais da parada (contato do proprietário, porteiras, o que não esquecer...)">${esc(p.obs)}</textarea>
+    </div>`;
+  });
+  L.innerHTML = html || '<p class="hint">Nenhuma parada ainda. Clique em "+ Adicionar parada".</p>';
+  renderTotals();
+  save();
+}
+
+function renderTotals(){
+  const ini=new Date(state.meta.inicio), fim=state.paradas.length?state.paradas[state.paradas.length-1]._saida:ini;
+  $('#totals').textContent = `${state.paradas.length} paradas · ${state._nPred} prédicas · ${fmtKm(state._totKm)} · termina ${fmtDia(fim)} ${fmtH(fim)}`;
+  $('#st-km').textContent=fmtKm(state._totKm); $('#st-paradas').textContent=state.paradas.length; $('#st-pred').textContent=state._nPred; $('#st-fim').textContent=fmtDia(fim)+' '+fmtH(fim);
+  $('#tb-nome').textContent=(state.meta.nome||'Linha do tempo')+' — Linha do tempo operacional';
+}
+
+/* atualiza só os horários (mantém o foco nos inputs) */
+function refreshTimes(){
+  calcular();
+  state.paradas.forEach((p,i)=>{
+    const c=document.querySelector(`.card[data-p="${p.id}"]`); if(!c) return;
+    const td=c.querySelector('.times .tdata'); if(td) td.textContent=fmtDia(p._chegada); const tdg=c.querySelector('.times .dtag'); if(tdg) tdg.textContent='D'+p._D;
+    const tin=c.querySelector('.times .t-in'); if(document.activeElement!==tin){ tin.value=p.fixo||fmtH(p._chegada); } tin.classList.toggle('fixed',!!p.fixo);
+    c.querySelector('.times .t:not(input)').textContent=fmtH(p._saida);
+    p.atividades.forEach(a=>{ const cell=c.querySelector(`tr[data-at="${a.id}"] td.n`); if(!cell) return; const inp=cell.querySelector('input'); if(document.activeElement!==inp) inp.value=a.fixo||fmtH(a._inicio); inp.classList.toggle('fixed',!!a.fixo); });
+    const ac=document.querySelector(`.trecho[data-p="${p.id}"] .acum`); if(ac) ac.textContent='acumulado '+fmtKm(p._kmAcum);
+    if(i>0){ const tr=document.querySelector(`.trecho[data-p="${p.id}"]`); const b=tr&&tr.querySelector('.sug'); const sug=sugerirMin(p.trecho); if(b){ if(sug&&p.trecho.modal==='pe'){ b.dataset.sug=sug; b.textContent='sugerir '+fmtDur(sug); b.style.display=''; } else b.style.display='none'; } }
+  });
+  renderTotals(); save();
+}
+
+/* ============================================================
+   EVENTOS (editor)
+   ============================================================ */
+const findP = id => state.paradas.find(p=>p.id===id);
+const idxP = id => state.paradas.findIndex(p=>p.id===id);
+
+$('#lista').addEventListener('input', e=>{
+  const el=e.target;
+  if(el.dataset.pselAf!==undefined||el.dataset.pselSf!==undefined){ const box=el.closest('.predsel'); const inp=box.querySelector('input'); if(el.value==='__outro__'){ inp.hidden=false; inp.value=''; inp.focus(); } else { inp.hidden=true; inp.value=el.value; } inp.dispatchEvent(new Event('input',{bubbles:true})); return; }
+  const card=el.closest('.card'), tre=el.closest('.trecho');
+  if(tre){ const p=findP(tre.dataset.p); p.trecho[el.dataset.t]=el.value; if(el.dataset.t==='modal') render(); else refreshTimes(); return; }
+  if(!card) return; const p=findP(card.dataset.p);
+  if(el.dataset.f==='fixo'){ const v=el.value.trim(); if(v===''){ p.fixo=''; refreshTimes(); } else { const n=normHora(v); if(n){ p.fixo=n; refreshTimes(); } } return; }
+  if(el.dataset.f){ p[el.dataset.f]=el.value; if(el.dataset.f==='fixo') refreshTimes(); else if(el.dataset.f==='nome'||el.dataset.f==='local'||el.dataset.f==='obs') save(); else refreshTimes(); return; }
+  const ast=el.closest('tr[data-ast]'); if(ast){ const a=p.atividades.find(x=>x.id===ast.closest('tr.sub').dataset.at); const s=a.setores.find(x=>x.id===ast.dataset.ast); s[el.dataset.sf]=el.value; if(el.dataset.sf==='setor'){ const tag=ast.querySelector('.tag'); tag.textContent=s.setor; tag.style.background=COR[s.setor]||'#777'; if(s.setor==='PREDICANTES'||ast.querySelector('.predsel')) render(); } save(); return; }
+  const at=el.closest('tr[data-at]'); if(at){ const a=p.atividades.find(x=>x.id===at.dataset.at);
+    if(el.dataset.af==='fixo'){ const v=el.value.trim(); if(v===''){ a.fixo=''; refreshTimes(); } else { const n=normHora(v); if(n){ a.fixo=n; refreshTimes(); } } return; }
+    a[el.dataset.af]=el.value; if(el.dataset.af==='tipo') render(); else refreshTimes(); return; }
+  const st=el.closest('tr[data-st]'); if(st){ const s=p.setores.find(x=>x.id===st.dataset.st); s[el.dataset.sf]=el.value; if(el.dataset.sf==='setor'){ const tag=st.querySelector('.tag'); tag.textContent=s.setor; tag.style.background=COR[s.setor]||'#777'; if(s.setor==='PREDICANTES'||st.querySelector('.predsel')) render(); } save(); }
+});
+
+$('#lista').addEventListener('focusout', e=>{ const el=e.target; if(el.dataset&&(el.dataset.f==='fixo'||el.dataset.af==='fixo')){ const v=el.value.trim(); if(v!=='' && !normHora(v)){ /* inválido: descarta */ } render(); } });
+
+$('#lista').addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.classList.contains('sug')){ const p=findP(b.closest('.trecho').dataset.p); p.trecho.min=b.dataset.sug; render(); return; }
+  const card=b.closest('.card'); if(!card) return; const p=findP(card.dataset.p); const i=idxP(p.id); const a=b.dataset.a;
+  if(a==='up'&&i>0){ [state.paradas[i-1],state.paradas[i]]=[state.paradas[i],state.paradas[i-1]]; render(); }
+  else if(a==='down'&&i<state.paradas.length-1){ [state.paradas[i+1],state.paradas[i]]=[state.paradas[i],state.paradas[i+1]]; render(); }
+  else if(a==='del'){ if(confirm(`Excluir a parada "${p.nome||'sem nome'}"?`)){ state.paradas.splice(i,1); render(); } }
+  else if(a==='dup'){ const c=JSON.parse(JSON.stringify(p)); c.id=uid(); c.nome=(p.nome||'')+' (cópia)'; c.atividades.forEach(x=>{x.id=uid();(x.setores||[]).forEach(y=>y.id=uid());}); c.setores.forEach(x=>x.id=uid()); state.paradas.splice(i+1,0,c); render(); }
+  else if(a==='addAt'){ p.atividades.push(novaAtiv()); render(); focusLast(card,'tr[data-at] input[data-af="nome"]'); }
+  else if(a==='addSt'){ p.setores.push(novoSetor()); render(); focusLast(card,'tr[data-st] textarea[data-sf="faz"]'); }
+  else if(a==='delAt'){ const id=b.closest('tr').dataset.at; p.atividades=p.atividades.filter(x=>x.id!==id); render(); }
+  else if(a==='dupAt'){ const id=b.closest('tr').dataset.at; const k=p.atividades.findIndex(x=>x.id===id); const c=JSON.parse(JSON.stringify(p.atividades[k])); c.id=uid(); c.fixo=''; c.setores.forEach(x=>x.id=uid()); p.atividades.splice(k+1,0,c); render(); const inp=document.querySelector(`tr[data-at="${c.id}"] input[data-af="nome"]`); if(inp){ inp.focus(); inp.select(); } }
+  else if(a==='dupAst'){ const sub=b.closest('tr.sub'); const at=p.atividades.find(x=>x.id===sub.dataset.at); const id=b.closest('tr[data-ast]').dataset.ast; const k=at.setores.findIndex(x=>x.id===id); const c=JSON.parse(JSON.stringify(at.setores[k])); c.id=uid(); at.setores.splice(k+1,0,c); render(); const sel=document.querySelector(`tr[data-ast="${c.id}"] select`); if(sel) sel.focus(); }
+  else if(a==='dupSt'){ const id=b.closest('tr').dataset.st; const k=p.setores.findIndex(x=>x.id===id); const c=JSON.parse(JSON.stringify(p.setores[k])); c.id=uid(); p.setores.splice(k+1,0,c); render(); const sel=document.querySelector(`tr[data-st="${c.id}"] select`); if(sel) sel.focus(); }
+  else if(a==='addAst'){ const id=b.closest('tr.sub').dataset.at; const at=p.atividades.find(x=>x.id===id); at.setores.push(novoSetor()); render(); const r=document.querySelector(`tr.sub[data-at="${id}"]`); const t=r.querySelectorAll('textarea[data-sf="faz"]'); if(t.length) t[t.length-1].focus(); }
+  else if(a==='delAst'){ const sub=b.closest('tr.sub'); const at=p.atividades.find(x=>x.id===sub.dataset.at); const id=b.closest('tr[data-ast]').dataset.ast; at.setores=at.setores.filter(x=>x.id!==id); render(); }
+  else if(a==='delSt'){ const id=b.closest('tr').dataset.st; p.setores=p.setores.filter(x=>x.id!==id); render(); }
+});
+function focusLast(card,sel){ const c=document.querySelector(`.card[data-p="${card.dataset.p}"]`); const els=c.querySelectorAll(sel); if(els.length) els[els.length-1].focus(); }
+
+$('#b-add').onclick=()=>{ const p=novaParada(); if(state.paradas.length) p.trecho.min='30'; state.paradas.push(p); render(); const cards=document.querySelectorAll('.card'); const c=cards[cards.length-1]; c.scrollIntoView({behavior:'smooth',block:'center'}); c.querySelector('.nome').focus(); };
+
+['m-nome','m-data','m-hora','m-ritmo','m-aclive'].forEach(id=>{ $('#'+id).addEventListener('input',()=>{ state.meta.nome=$('#m-nome').value; const d=$('#m-data').value, h=$('#m-hora').value; if(d&&h) state.meta.inicio=d+'T'+h; state.meta.ritmo=num($('#m-ritmo').value); state.meta.aclive=num($('#m-aclive').value); if(id==='m-data'||id==='m-hora') render(); else refreshTimes(); }); });
+
+/* exportar / importar */
+$('#b-import').onclick=()=>$('#file').click();
+$('#b-export-hidden').onclick=()=>{ const clean=JSON.parse(JSON.stringify(state,(k,v)=>k.startsWith('_')?undefined:v)); const blob=new Blob([JSON.stringify(clean,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`linha-do-tempo-${(state.meta.nome||'top').replace(/[^\w-]+/g,'_')}.json`; a.click(); };
+$('#file').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.paradas||!d.meta) throw 0; state=migrate(d); renderMeta(); render(); }catch(err){ alert('Arquivo inválido.'); } e.target.value=''; }; r.readAsText(f); };
+
+/* menu */
+const menu=$('#menu');
+$('#b-menu').onclick=e=>{ e.stopPropagation(); menu.classList.toggle('open'); };
+document.addEventListener('click',e=>{ if(!e.target.closest('.menu-wrap')) menu.classList.remove('open'); });
+menu.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; menu.classList.remove('open'); const m=b.dataset.m;
+  if(m==='export') $('#b-export-hidden').click();
+  else if(m==='import') $('#file').click();
+  else if(m==='seed'){ if(confirm('Substituir a linha do tempo atual pelo exemplo do TOP RS 0426? (Exporte antes se quiser guardar a atual.)')){ state=seed(); renderMeta(); render(); } }
+  else if(m==='clear'){ if(confirm('Apagar tudo e começar em branco? Os cadastros (setores, tipos) são mantidos.')){ const cad=state.cadastros; state={meta:{nome:'',inicio:new Date().toISOString().slice(0,11)+'14:00',ritmo:2.5,aclive:10},cadastros:cad,paradas:[]}; renderMeta(); render(); } }
+  else if(m.startsWith('cad-')) abrirCadastro(m.slice(4));
+});
+
+/* cadastros */
+let cadAtual='setores';
+const CAD_INFO={
+  predicantes:{titulo:'Predicantes',hint:'Lista de quem prega. Ao escolher o tipo "Prédica" numa atividade, ou o setor PREDICANTES numa tarefa, aparece uma caixa para selecionar o predicante. Renomear atualiza as prédicas existentes.',cor:false},
+  setores:{titulo:'Setores',hint:'Renomear um setor atualiza todas as tarefas que já usam esse nome. Um setor em uso não pode ser excluído.',cor:true},
+  tiposAtiv:{titulo:'Tipos de atividade',hint:'O tipo "Prédica" é especial: é ele que numera as prédicas e mostra predicante/tema. Renomear atualiza as atividades existentes.',cor:false},
+  tiposParada:{titulo:'Tipos de parada',hint:'Renomear atualiza as paradas existentes. Um tipo em uso não pode ser excluído.',cor:false},
+};
+function usoCad(kind,nome){
+  let n=0;
+  state.paradas.forEach(p=>{
+    if(kind==='setores'){ n+=p.setores.filter(s=>s.setor===nome).length; p.atividades.forEach(a=>n+=a.setores.filter(s=>s.setor===nome).length); }
+    else if(kind==='tiposAtiv'){ n+=p.atividades.filter(a=>a.tipo===nome).length; }
+    else if(kind==='tiposParada'){ if(p.tipo===nome) n++; }
+    else if(kind==='predicantes'){ n+=p.atividades.filter(a=>a.predicante===nome).length; p.setores.forEach(s=>{ if(s.quem===nome) n++; }); p.atividades.forEach(a=>a.setores.forEach(s=>{ if(s.quem===nome) n++; })); }
+  });
+  return n;
+}
+function renomearCad(kind,de,para){
+  if(de===para) return;
+  state.paradas.forEach(p=>{
+    if(kind==='setores'){ p.setores.forEach(s=>{ if(s.setor===de) s.setor=para; }); p.atividades.forEach(a=>a.setores.forEach(s=>{ if(s.setor===de) s.setor=para; })); }
+    else if(kind==='tiposAtiv'){ p.atividades.forEach(a=>{ if(a.tipo===de) a.tipo=para; }); }
+    else if(kind==='tiposParada'){ if(p.tipo===de) p.tipo=para; }
+    else if(kind==='predicantes'){ p.atividades.forEach(a=>{ if(a.predicante===de) a.predicante=para; }); p.setores.forEach(s=>{ if(s.quem===de) s.quem=para; }); p.atividades.forEach(a=>a.setores.forEach(s=>{ if(s.quem===de) s.quem=para; })); }
+  });
+}
+function abrirCadastro(kind){ cadAtual=kind; const info=CAD_INFO[kind]; $('#cad-title').textContent=info.titulo; $('#cad-hint').textContent=info.hint; renderCadastro(); $('#modal-cad').classList.add('open'); }
+function renderCadastro(){
+  const kind=cadAtual, info=CAD_INFO[kind], list=state.cadastros[kind];
+  $('#cad-list').innerHTML = list.map((item,i)=>{ const nome=info.cor?item.nome:item; const uso=usoCad(kind,nome); return `<div class="cad-row" data-i="${i}">
+    ${info.cor?`<input type="color" value="${esc(item.cor)}" data-c="cor">`:''}
+    <input type="text" value="${esc(nome)}" data-c="nome">
+    <span class="uso">${uso?uso+' em uso':'sem uso'}</span>
+    <button class="icon" data-c="up" title="Subir">▲</button><button class="icon" data-c="down" title="Descer">▼</button>
+    <button class="icon" data-c="del" title="Excluir" ${uso?'disabled style="opacity:.3"':''}>✕</button>
+  </div>`; }).join('') || '<p class="hint">Nenhum item.</p>';
+}
+$('#cad-list').addEventListener('change',e=>{
+  const row=e.target.closest('.cad-row'); if(!row) return; const i=+row.dataset.i, kind=cadAtual, info=CAD_INFO[kind], list=state.cadastros[kind]; const c=e.target.dataset.c;
+  if(c==='cor'){ list[i].cor=e.target.value; save(); render(); return; }
+  if(c==='nome'){ let v=e.target.value.trim(); if(kind==='setores') v=v.toUpperCase(); const atual=info.cor?list[i].nome:list[i];
+    if(!v){ e.target.value=atual; return; }
+    const dup=list.some((x,j)=>j!==i && (info.cor?x.nome:x)===v); if(dup){ alert('Já existe um item com esse nome.'); e.target.value=atual; return; }
+    renomearCad(kind,atual,v); if(info.cor) list[i].nome=v; else list[i]=v; save(); render(); renderCadastro(); }
+});
+$('#cad-list').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b||b.disabled) return; const row=b.closest('.cad-row'); const i=+row.dataset.i, kind=cadAtual, list=state.cadastros[kind]; const c=b.dataset.c;
+  if(c==='del'){ const nome=CAD_INFO[kind].cor?list[i].nome:list[i]; if(confirm(`Excluir "${nome}"?`)){ list.splice(i,1); save(); render(); renderCadastro(); } }
+  else if(c==='up'&&i>0){ [list[i-1],list[i]]=[list[i],list[i-1]]; save(); render(); renderCadastro(); }
+  else if(c==='down'&&i<list.length-1){ [list[i+1],list[i]]=[list[i],list[i+1]]; save(); render(); renderCadastro(); }
+});
+$('#cad-add').onclick=()=>{ const kind=cadAtual, info=CAD_INFO[kind], list=state.cadastros[kind]; let base=info.cor?'NOVO SETOR':(kind==='predicantes'?'Novo predicante':'Novo tipo'), nome=base, n=2; while(list.some(x=>(info.cor?x.nome:x)===nome)) nome=base+' '+(n++); list.push(info.cor?{nome,cor:'#'+Math.floor(Math.random()*0x7fffff+0x200000).toString(16).padStart(6,'0')}:nome); save(); render(); renderCadastro(); const inputs=$('#cad-list').querySelectorAll('input[type=text]'); const last=inputs[inputs.length-1]; last.focus(); last.select(); };
+$('#cad-close').onclick=()=>$('#modal-cad').classList.remove('open');
+
+/* ============================================================
+   IMPRESSÃO
+   ============================================================ */
+function fillPrintSetores(){ $('#p-setor').innerHTML = '<option value="">Todos os setores (linha do tempo completa)</option>' + SET().map(s=>`<option>${esc(s)}</option>`).join(''); }
+let previewMode=false;
+$('#b-print').onclick=()=>{ previewMode=false; fillPrintSetores(); $('#modal-print').classList.add('open'); };
+$('#b-preview').onclick=()=>{ if(document.body.classList.contains('preview')){ document.body.classList.remove('preview'); $('#b-preview').textContent='Visualizar roteiro'; return; } previewMode=true; fillPrintSetores(); $('#modal-print').classList.add('open'); };
+$('#b-print-pred').onclick=()=>{ renderPrint('',true,false); setTimeout(()=>window.print(),50); };
+$('#p-cancel').onclick=()=>$('#modal-print').classList.remove('open');
+$('#p-go').onclick=()=>{ $('#modal-print').classList.remove('open'); renderPrint($('#p-setor').value,false,$('#p-obs').checked); if(previewMode){ document.body.classList.add('preview'); $('#b-preview').textContent='Voltar ao editor'; window.scrollTo(0,0); } else { setTimeout(()=>window.print(),50); } };
+
+function tipoTag(t){ const m={'Prédica':'word','Refeição':'meal','Dormir':'sleep','Alvorada':'sleep','Vistoria':'alert','Embarque':'walk','Dinâmica':'walk','Formação':'walk','Oração':'word','Entrega':'alert'}; return m[t]||''; }
+function assignHTML(list){ return list.length?`<div class="pv-assign">`+list.map(s=>`<div class="pv-a" style="--sc:${COR[s.setor]||'#999'}"><b>${esc(s.setor)}${s.quem?' · '+esc(s.quem):''}</b><br>${esc(s.faz).replace(/\n/g,'<br>')}${s.pos?`<div class="pos"><b>Posicionamento:</b> ${esc(s.pos).replace(/\n/g,'<br>')}</div>`:''}</div>`).join('')+`</div>`:''; }
+function renderPrint(setor,resumo,obs){
+  calcular();
+  let h='';
+  if(!resumo){
+    h+=`<p class="pv-title">${esc(state.meta.nome||'Linha do Tempo')} — Linha do tempo${setor?' · '+esc(setor):''}</p>
+    <p class="pv-sub">${state.paradas.length} paradas · ${state._nPred} prédicas · ${fmtKm(state._totKm)} · início ${fmtDia(new Date(state.meta.inicio))} ${fmtH(new Date(state.meta.inicio))}${setor?' · Somente as tarefas do setor '+esc(setor)+'; horários e paradas são os mesmos para todos.':''}</p>`;
+    let dia=''; let aberto=false; h+=`<div class="pv-cols">`;
+    state.paradas.forEach((p,i)=>{
+      if(p._D!==dia){ const viradoAntes = i>0 && state.paradas[i-1].atividades.some(a=>a._viraD&&a._D===p._D); dia=p._D; if(!viradoAntes){ if(aberto) h+=`</div>`; h+=`<div class="pv-day"><span class="pv-dtag">D${p._D}</span><span>${fmtDiaLongo(p._chegada)}</span><small>${p._D===0?'ATÉ DORMIREM':'A PARTIR DA ALVORADA'}</small></div><div class="pv-tl">`; aberto=true; } }
+      if(i>0){ const t=p.trecho; const modal=t.modal==='pe'?'a pé':t.modal==='caminhao'?'de caminhão':''; h+=`<div class="pv-trecho">${num(t.km)?'<b>'+fmtKm(t.km)+'</b>':''}${num(t.aclive)?' · ↑'+num(t.aclive)+' m':''} · <b>${fmtDur(num(t.min))}</b> ${modal}${t.obs?' · '+esc(t.obs):''}</div>`; }
+      const sets = setor ? p.setores.filter(s=>s.setor===setor) : p.setores;
+      h+=`<article class="pv-stop"><div class="pv-marker">${i+1}</div><div class="pv-head"><span class="pv-time"><span class="pv-dtag sm">D${p._D}</span><small>${fmtDia(p._chegada)}</small> ${fmtH(p._chegada)} → ${mesmoDia(p._chegada,p._saida)?'':'<small>'+fmtDia(p._saida)+'</small> '}${fmtH(p._saida)}</span><h3 class="pv-name">${esc(p.nome)}</h3>${p.local?`<span class="pv-local">${esc(p.local)}</span>`:''}</div>`;
+      if(p.atividades.length){ h+=`<ul class="pv-ativ">`+p.atividades.map(a=>{ const isP=a.tipo==='Prédica'; const tg=tipoTag(a.tipo); const label = isP ? `<span class="pv-tag word">Prédica ${a._n}</span><b>${esc((a.tema||'').toUpperCase())}</b>${a.predicante?' · '+esc(a.predicante):''}${a.nome?' <span style="color:#61686c">('+esc(a.nome)+')</span>':''}` : `${a.tipo!=='Outro'?`<span class="pv-tag ${tg}">${esc(a.tipo)}</span>`:''}${esc(a.nome)}${a.predicante?' · '+esc(a.predicante):''}${a.tema?' <span style="color:#61686c">— '+esc(a.tema)+'</span>':''}`; const ss = setor ? a.setores.filter(s=>s.setor===setor) : a.setores; const banner = a._viraD?`<li class="pv-dturn"><span class="pv-dtag">D${a._D}</span> ${fmtDiaLongo(a._inicio)} — ALVORADA</li>`:''; const dataAtiv = `<em class="dd">D${a._D}</em>`+(mesmoDia(a._inicio,p._chegada)?'':`<em>${fmtDia(a._inicio)}</em>`); return banner+`<li><span class="h">${dataAtiv}<span class="hh">${fmtH(a._inicio)}</span><small>${num(a.min)?fmtDur(num(a.min)):''}${num(a.km)?' · '+fmtKm(a.km):''}</small></span><span class="lab">${label}</span>${assignHTML(ss)}</li>`; }).join('')+`</ul>`; }
+      if(sets.length){ h+=`<div class="pv-stopset"><div class="cap">Setores — parada inteira</div>${assignHTML(sets)}</div>`; }
+      if(obs&&p.obs) h+=`<p class="pv-obs">${esc(p.obs)}</p>`;
+      h+=`</article>`;
+    });
+    if(aberto) h+=`</div>`; h+=`</div>`;
+  } else {
+    const preds=[]; state.paradas.forEach((p,i)=>p.atividades.forEach(a=>{ if(a.tipo==='Prédica') preds.push({n:a._n,tema:a.tema,pred:a.predicante,local:p.nome,dia:fmtDia(a._inicio),hora:fmtH(a._inicio),obs:a.nome}); }));
+    h+=`<div class="p-resumo"><p class="pv-title">${esc(state.meta.nome||'')} — Resumo das prédicas</p><p class="pv-sub">${preds.length} prédicas · início ${fmtDia(new Date(state.meta.inicio))}</p><table><tr><th>Nº</th><th>Tema</th><th>Predicante / Responsável</th><th>Local</th><th>Dia</th><th>Hora</th><th>Obs</th></tr>`+preds.map(x=>`<tr><td>${x.n}</td><td><b>${esc(x.tema)}</b></td><td>${esc(x.pred)}</td><td>${esc(x.local)}</td><td>${x.dia}</td><td>${x.hora}</td><td>${esc(x.obs)}</td></tr>`).join('')+`</table></div>`;
+  }
+  h+=`<div class="p-foot">${esc(state.meta.nome||'')} · linha do tempo gerada em ${new Date().toLocaleString('pt-BR')}</div>`;
+  $('#print').innerHTML=h;
+}
+
+/* ============================================================
+   EXEMPLO: TOP RS 0426 (transcrito da planilha — revisar)
+   ============================================================ */
+function seed(){
+  const P=(nome,local,tipo,trecho,atividades,setores,obs,fixo)=>({id:uid(),nome,local,tipo,obs:obs||'',fixo:fixo||'',trecho:Object.assign({km:'',aclive:'',modal:'pe',min:'',obs:''},trecho||{}),atividades:(atividades||[]).map(a=>({id:uid(),tipo:a[0],nome:a[1],predicante:a[2]||'',tema:a[3]||'',min:a[4]??'',setores:(a[5]||[]).map(s=>({id:uid(),setor:s[0],faz:s[1],pos:s[2]||''}))})),setores:(setores||[]).map(s=>({id:uid(),setor:s[0],faz:s[1],pos:s[2]||''}))});
+  const A=(tipo,nome,pred,tema,min,setores)=>[tipo,nome,pred,tema,min,setores];
+  const PR=(tema,pred,min,nome,setores)=>['Prédica',nome||'',pred,tema,min,setores];
+  return {meta:{nome:'TOP RS 0426',inicio:'2026-04-23T14:00',ritmo:2.5,aclive:10},cadastros:defCadastros(),paradas:[
+    P('IBC','Igreja Batista em Camobi','Base',null,[
+      A('Outro','Check-in legendários','Fernando Colle','',120,[
+        ['LOGÍSTICA','Mesas e 2 notebooks para o check-in. Reservar estacionamento dos caminhões na rua.','Entrada da IBC / rua'],
+        ['EVENTOS','Vendas na loja.','Loja'],
+      ]),
+      A('Outro','Check-in novatos','Isaac','',60,[
+        ['LOGÍSTICA','Mesas e 1 notebook. Distribuição das tribos. Conferir se trouxeram a manta.','Entrada'],
+        ['HAKUNA','Checar os últimos atestados.','Ao lado do check-in'],
+      ]),
+      A('Outro','Ligar para os novatos que não fizeram check-in','Isaac','',90,[
+        ['PATRON','Revisar a linha do tempo com o coordenador geral; confirmar horários dos caminhões com o Tólio.',''],
+      ]),
+      A('Oração','Oração dos legendários','Pr Romulo','chamar os legendários, juntar e ajoelhar',5,[
+        ['TODOS OS LGND','Ajoelhar juntos.','Templo'],
+      ]),
+      A('Formação','Organização em famílias','Voz','assim que chegarem todos ou faltando até 10 senderistas',5,[
+        ['VOZ','Organizar em tribos.','Frente das famílias'],
+      ]),
+      A('Outro','Boas-vindas','Pr. Ailton','visão/missão/objetivos, apresentar equipe, bem-vindo ao Track Revolução',5),
+      PR('SUA TRANSFORMAÇÃO','Pr Romulo',10,'juntos'),
+      A('Outro','Último aviso + definir capitão e sub','Pr Romulo / Voz','oportunidade de desistir; capitães: Ricardo, Romulo, Cleryston, Ailton',3,[
+        ['VOZ','Definir capitão e sub de cada família.',''],
+      ]),
+      A('Vistoria','Vistoria 1','Voz','deixar tudo que não é permitido (comida, cortantes, eletrônicos)',2,[
+        ['VOZ','Conduzir a entrega; CT e Sub recebem as entregas.','Com cada família'],
+        ['LOGÍSTICA','Zipbags e canetas para plástico.',''],
+      ]),
+      A('Dinâmica','Exercícios no estacionamento ao lado','Voz','',30,[
+        ['VOZ','Levar as famílias ao estacionamento; conduzir os exercícios.','Estacionamento ao lado da IBC'],
+        ['HAKUNA','Observar se há senderista debilitado nos exercícios.','Junto aos exercícios'],
+        ['LOGÍSTICA','Iluminação no estacionamento.',''],
+        ['EVENTOS','Palavra para as famílias/esposas que ficam no templo.','Templo IBC'],
+      ]),
+    ],[],'Check-in 14:00–16:00 (legendários) e 16:00–17:00 (novatos). Início oficial 18:30. Embarque nos caminhões 19:30.'),
+
+    P('Salão da Saxônia','Desembarque na frente do salão','Prédica',{km:'',aclive:'',modal:'caminhao',min:120,obs:'asfalto até Silveira Martins e desce pelo Mirante Michelin — 60 min + 20 min embarque/desembarque · https://maps.app.goo.gl/3mfaxbXmsmFJc3Cr5'},[
+      A('Vistoria','Vistoria 2 (revista)','Segurança / chefe / sub / hakunas','banheiro antes; formar famílias com 1 braço de distância; abrir mochila, barraca, saco, bolsos; tirar cinto, calçado e meia',20,[
+        ['SEGURANÇA','Fazer a revista.','Um por família'],
+        ['VOZ','Mandar ao banheiro antes de entrar; formar as famílias com distanciamento; mochila à direita.','Frente do salão'],
+        ['CHEFES/SUB','Acompanham a revista da própria família.','Com a família'],
+        ['EVENTOS','Bandana (vendas).','Entrada'],
+      ]),
+      PR('APROVEITE A SUA CHANCE / CORRUPÇÃO','Tiago Pistoia',15,'juntos — chance de entregar o que ficou / oração de olhos fechados',[
+        ['VOZ','Senderistas sentados, calçados postos, mochila ainda no chão.',''],
+      ]),
+      A('Entrega','Bandeiras aos capitães, MRE + água, remédios, lanterna de cabeça','Voz','mochilas ainda no chão',5,[
+        ['VOZ','Entregar bandeiras aos capitães; avisar da hora do remédio e da lanterna.',''],
+        ['LOGÍSTICA','Entrega e orientação da água e do MRE (avisar legendários para pegarem o MRE também).','Fundo do salão'],
+      ]),
+      A('Entrega','Segurança na trilha + Shittube','Jonas / Segurança','cobra, onde pisa, fechar barracas, barrigueira da mochila',5,[
+        ['SEGURANÇA','Orientação de segurança na trilha; explicar e entregar o Shittube.','Frente'],
+      ]),
+      A('Entrega','Fogareiros ao sub','Sidnei (Logística)','explicar o uso; depois mochila nas costas',5,[
+        ['LOGÍSTICA','Entregar e explicar o fogareiro ao sub de cada família.',''],
+        ['VOZ','Mandar pôr a mochila nas costas.',''],
+      ]),
+      A('Outro','O que são senderistas / profissões; legendários saem para fala do coordenador; aviso do bastão','Voz','',10,[
+        ['VOZ','Explicar senderistas e profissões. Avisar do bastão na saída.',''],
+        ['TODOS OS LGND','Sair do salão para a fala do coordenador.','Fora do salão'],
+        ['SEGURANÇA','Separar sinalizadores e balizadores para ir na frente com o abre e o Patron.','Saída'],
+      ]),
+    ],[],'Proprietária: Heidi Coradini (confirmado). Início da caminhada 22:30.'),
+
+    P('Esquina da Saxônia / Mirante','Local da prédica Murmuração','Prédica',{km:5.7,aclive:185,modal:'pe',min:120},[
+      A('Formação','Alinhar as famílias para a prédica','Voz','',10,[['VOZ','Alinhar as famílias.','']]),
+      PR('MURMURAÇÃO','Alan Rieger',20,'juntos',[['VOZ','Voltar a caminhar logo após.','']]),
+    ],[['SEGURANÇA','Sinalizadores e balizadores na frente com o abre e o Patron durante toda a caminhada noturna.','Abre e fecha da coluna']]),
+
+    P('Represa / Rio ao lado do Acampamento A1','','Prédica',{km:4.8,aclive:162,modal:'pe',min:150},[
+      A('Formação','Alinhar as famílias para a prédica','Voz','',10),
+      PR('LEVÁ-LO AO DESERTO','Cleryston',20,'juntos — rio ao lado do Acampamento A1'),
+    ]),
+
+    P('Acampamento A1','Propriedade Irineu e Célia Bordignon','Acampamento',{km:0.3,aclive:39,modal:'pe',min:10},[
+      A('Dormir','Montar barracas e dormir','Voz','começa a clarear às 5:30',125,[
+        ['LOGÍSTICA','Fogueira no acampamento dos senderistas.','Acampamento'],
+        ['PATRON','5:45 acordar os vozes. 6:00 todos os legendários para o despertar dos senderistas.',''],
+      ]),
+      A('Alvorada','Alvorada: banho, café, desmontar barraca','Voz','',45,[
+        ['VOZ','Perguntar ao capitão se todos comeram e beberam algo. Avisar da hora do remédio.','Com a família'],
+        ['HAKUNA','Observar se há senderista debilitado no acordar.',''],
+      ]),
+      A('Formação','Alinhar todas as tribos','Voz','',10),
+      PR('PÃO NOSSO','Luiz Maciel',15,'juntos'),
+      A('Outro','Caminhar até o local dos exercícios depois do rio; vistoria do lixo','Voz','',5,[
+        ['VOZ','Vistoria do local (lixo).',''],
+        ['LOGÍSTICA','Recolher o lixo.',''],
+      ]),
+      PR('DECISÕES RADICAIS','Ricardo Lebedenco',20,'juntos'),
+      A('Dinâmica','Exercícios e brincadeiras','Voz','já apurar as famílias mais debilitadas',40,[
+        ['VOZ','8:30 início da caminhada para as 5 famílias mais debilitadas; 8:50 as demais (se não houver, sobem todos juntos).',''],
+        ['HAKUNA','Avaliar se há enfermo para retirar antes do início da caminhada.',''],
+      ]),
+    ],[],'Sem aluguel. Não deixar lixo onde os senderistas acamparam e fechar bem as porteiras.'),
+
+    P('Topo da Montanha','Topo das 14 voltas — casa velha','Prédica',{km:2.94,aclive:346,modal:'pe',min:60,obs:'primeiras famílias chegam 9:30'},[
+      PR('ALÉM DO TOPO (corda)','Isaac / Cleryston',20,'1 família por prédica, 2 predicantes — manda uma nova assim que a anterior acabar',[
+        ['VOZ','Esperar no topo e liberar as famílias para a prédica das cordas. Podem sentar.','Topo'],
+        ['SEGURANÇA','Chamar as famílias. Amontoar mochilas na casa velha.','Casa velha'],
+        ['LOGÍSTICA','2 cordas.',''],
+      ]),
+      PR('CEGO E MUDO','Cláudio Stormowski',20,'2 famílias por prédica',[
+        ['SEGURANÇA','Chamar as famílias.',''],
+        ['LOGÍSTICA','24 vendas. Marcar com os caminhões às 9:30 no ponto de embarque.',''],
+        ['PATRON','Avisar o tempo. Soltar as 2 primeiras famílias após 30 min de descanso para o ponto de embarque (200 m).',''],
+      ]),
+    ],[],'Proprietário: Marildo Ferlin (ligar, sem WhatsApp).'),
+
+    P('Cascata do Moinho Anversa','Entrada da trilha da cascata','Prédica',{km:12.8,aclive:'',modal:'caminhao',min:65,obs:'200 m a pé até o ponto do caminhão + 45 min de caminhão · https://maps.app.goo.gl/tWivaSKMCcrtBj9JA'},[
+      A('Outro','Deixar as mochilas no caminho (começa na entrada e vão subindo)','Voz','ali irão almoçar depois',5,[
+        ['SEGURANÇA','Sinalizar a entrada da trilha. Controlar pelo rádio o deslocamento das famílias (2 por vez).','Entrada da trilha'],
+      ]),
+      PR('PUREZA RADICAL (cachoeira)','Diego Cunha',35,'2 famílias por prédica',[['SEGURANÇA','Sinalizando.','Cascata do Moinho']]),
+      PR('FENDA DA ALMA / SUICÍDIO (mirante da cascata)','Marcos Macedo',35,'2 famílias por prédica',[
+        ['SEGURANÇA','Sinalizando.','Mirante'],
+        ['LOGÍSTICA','Verificar necessidade de caixa de som.','Mirante'],
+      ]),
+      PR('O ESSENCIAL QUE DESPREZAMOS','Jackson',30,'2 famílias por prédica — acima do caminho, onde deixaram as mochilas',[['SEGURANÇA','Sinalizando.','']]),
+      A('Refeição','Almoço','','famílias almoçam onde deixaram as mochilas; legendários na casa de pedra',180,[
+        ['COZINHA','Almoço dos legendários na casa de pedra.','Casa de pedra'],
+        ['HAKUNA','Avaliar se há enfermo para retirar antes da próxima caminhada.',''],
+        ['VOZ','Já pegar lanternas para a saída — pode chegar à noite na Capela.',''],
+      ]),
+    ],[],'Caminhões: 2 de 34 e 2 de 20 lugares (+24 em pé). Proprietário: Edvino Anversa (contato William).'),
+
+    P('Capela N. S. Rosário','','Prédica',{km:3.9,aclive:117,modal:'pe',min:40},[
+      PR('MILHA EXTRA','Cleryston',40,'todas as famílias — entrega das cartas antes do apelo',[
+        ['SEGURANÇA','Sinalizando entrada da trilha.',''],
+        ['VOZ','Famílias voltam a caminhar todas juntas.',''],
+      ]),
+    ]),
+
+    P('Cemitério de Val Feltrina','','Prédica',{km:3.0,aclive:58,modal:'pe',min:100},[
+      A('Formação','Alinhar as famílias no cemitério','Voz','se não chegaram todos, faz com os que chegaram',5,[['CHEFES/SUB','Ficam com as famílias.','']]),
+      PR('LEGADO (cemitério)','Ricardo',25,'todas as famílias',[
+        ['TODOS OS LGND','Ficam na prédica e saem no final.',''],
+        ['PATRON','Chegar escuro no Acampamento 2 (19:40 escurece em novembro).',''],
+        ['VOZ','Avisar todos os legendários para subirem ao acampamento para a recepção; 5 min depois conduzir as famílias.',''],
+      ]),
+    ]),
+
+    P('Acampamento 2','Propriedade Osvino Visentini (arrendatário)','Acampamento',{km:0.3,aclive:'',modal:'pe',min:15},[
+      A('Outro','Conquista da Montanha — recepção e celebração','Todos os LGND','',45,[
+        ['TODOS OS LGND','Receber e celebrar a conquista da montanha até 20:30.','Entrada do acampamento'],
+        ['LOGÍSTICA','Fogueira de recepção dos novatos.',''],
+      ]),
+      A('Dormir','Montar barracas, comer e dormir','Voz','FECHAR AS BARRACAS',80,[
+        ['VOZ','Avisar da hora do remédio. Lembrar de fechar as barracas.',''],
+        ['SEGURANÇA','Alguns seguranças, chefes/sub e hakunas dormem com os senderistas.','Acampamento dos senderistas'],
+        ['LOGÍSTICA','21:50 PREPARAR FOGUEIRA para 22:30 (local seguro, lenha, FireBox — não fazer fogo no chão). Delimitar acampamento dos LGND junto aos senderistas. Preparar caixas de som e microfone.','Fogueira'],
+      ]),
+      A('Oração','Oração dos LGND na base (40 min)','Romulo','chegar cantando na fogueira',40,[['TODOS OS LGND','40 min de oração na base; ir cantando até a fogueira.','Base dos legendários']]),
+      A('Oração','ORAÇÃO DA MEIA NOITE — 5 palavras de 2 min','1 Romulo · 2 Ailton · 3 Cleryston · 4 Ricardo · 5 Alan','Entrega/Consagração · Essência da Adoração · Família · Cura · Caminhar sobre as águas',90),
+      A('Dormir','Voltar às barracas e dormir','','',390,[
+        ['PATRON','5:45 acordar vozes; 6:00 acordar legendários do acampamento para o café. Passar horário do café pro Ivan da Cozinha.',''],
+        ['COZINHA','Café dos legendários às 6:00.',''],
+      ]),
+      A('Alvorada','Alvorada: café e desmontar barracas','Voz','',45,[['VOZ','Todos comeram e beberam? Hora do remédio.','']]),
+      A('Formação','Organizar em tribos, entrega do lixo e pertences','Voz','',10),
+      PR('DESOBEDIÊNCIA','Ricardo',15,'juntos',[['TODOS OS LGND','Ficam em volta.','']]),
+      PR('FUGINDO DAS RESPONSABILIDADES (cocô)','Romulo Lobo',15,'juntos'),
+      A('Outro','Sniker Awards','Ailton','chamar todos os senderistas para a frente para ganhar tempo',10,[['LOGÍSTICA','Snikers separados.','']]),
+      A('Outro','Testemunhos','Ailton','testemunho específico da montanha',10,[['LOGÍSTICA','Caixa de som e microfone.','']]),
+      A('Outro','Fardo leve — reunião da equipe','Romulo','prêmio: não levam todas as mochilas',15,[
+        ['LOGÍSTICA','2 galões de água por tribo e 2 sacos de lixo de cor diferente.',''],
+        ['CHEFES/SUB','Instrução da mochila única: bíblia, lanternas, toda comida e água, fogareiro, manta térmica, protetor, repelente, capa de chuva, casaco.',''],
+      ]),
+      PR('DÁ-ME AGORA ESTE MONTE','Pr. Odair',30,'juntos',[
+        ['CHEFES/SUB','Deixar as mochilas alinhadas para a logística no portão do acampamento 2.','Portão'],
+        ['HAKUNA','Avaliar se há enfermo para retirar antes da caminhada.',''],
+      ]),
+    ],[],'Oração pode ser adiantada em caso de chuva. Não deixar lixo que o gado possa comer. Legendários acampam no campo atrás da Sociedade.'),
+
+    P('Trilha Sargentão / Prainha','Trilha das Massas > Meio Mundo > Sargentão','Prédica',{km:4.0,aclive:147,modal:'pe',min:90,obs:'últimas famílias devem chegar 10:30; todas sobem juntas'},[
+      PR('INQUEBRANTÁVEL','Cristian Cebey / Isaac',30,'3 famílias e 2 famílias'),
+      PR('BÚSSOLA','Alan / Ricardo / Odair / Diego Cunha',75,'5 famílias, individual — local da Casa de Oração (casa do Édson)',[
+        ['CHEFES/SUB','Aguardam separados até terminar a prédica.','Separados'],
+        ['SEGURANÇA','Aguardam separados com chefes e subs.',''],
+        ['LOGÍSTICA','Cogitar reposição de água (depende do clima). Bom local: esquina da estrada antes da geral dos mantuanos. Saída de duas em duas.',''],
+      ]),
+    ],[],'Proprietário: Edson (Sargentão/peleia).'),
+
+    P('Casa das 7 Mulheres','Sobrado Segalla — Poço de Naamã / Memorial','Prédica',{km:2.7,aclive:159,modal:'pe',min:45,obs:'percurso novo'},[
+      A('Outro','Chegada: famílias deixam água e mochila na casa e descem só com o bastão','Voz','',10,[
+        ['SEGURANÇA','Sinalizar entrada da casa; porteira fechada se tiver gado.','Entrada'],
+        ['CHEFES/SUB','Acompanham as famílias no Naamã e no Memorial.',''],
+      ]),
+      PR('POÇO DE NAAMÃ','Lucas Harter',40,'2 famílias por prédica',[
+        ['SEGURANÇA','Liberar 2 famílias no topo do potreiro para o segurança da entrada do poço. Sinalizar entrada do poço.','Topo do potreiro / entrada do poço'],
+        ['LOGÍSTICA','Instalar caixas de som.',''],
+      ]),
+      PR('PRÉ-TRAVESSIA','Fernando Colle',20,'2 famílias por prédica',[
+        ['SEGURANÇA','Controlar o fluxo para o Memorial: libera as que vieram do Naamã quando o Memorial estiver livre.','Memorial'],
+      ]),
+      A('Outro','Travessia nas águas','Ailton / Cleryston / Alan / Ricardo','',30,[
+        ['SEGURANÇA','Indicar para subirem de volta ao topo do potreiro e almoçarem.','Saída'],
+        ['LOGÍSTICA','Corda na subida da travessia. Fogo se estiver frio.',''],
+      ]),
+      A('Refeição','Almoço na Casa das 7 Mulheres','','última família 30 min no mínimo',50,[
+        ['LOGÍSTICA','Repor a água se tiver muito calor/sol.',''],
+        ['HAKUNA','Avaliar enfermos antes da próxima caminhada.',''],
+        ['VOZ','Saída: 5 famílias saem primeiro, outras 5 saem 30 min depois e controlam o ritmo.',''],
+      ]),
+    ],[],'Proprietário: Julio Silva. Saída flexível entre 15:00 e 16:00 conforme andamento.'),
+
+    P('Casa de Oração','Casa do Édson — 2 casas','Prédica',{km:2.4,aclive:89,modal:'pe',min:50},[
+      PR('CASA DE ORAÇÃO — SUA CASA SERVINDO AO SENHOR','1 Marcos Macedo · 2 Luiz Maciel',90,'2 famílias por prédica, 30 min por família, DUAS casas',[
+        ['LOGÍSTICA','Fogueira nas 2 casas + 2 violões. Apagar o fogo e recolher o lixo ao terminar (não deixar latas).','Cada casa'],
+        ['PATRON','Sinalização: 3 seguranças, 1 por casa e 1 volante indicando onde guardar a peleja no potreiro.',''],
+        ['PREDICANTES','Irmãos da tenda de oração ajudam a orar pelos legendários.',''],
+      ]),
+      A('Outro','Alinhamento com todos os legendários sobre a peleja e entrega do madeiro','','',10,[['TODOS OS LGND','Alinhamento.','']]),
+      A('Dinâmica','Alinhar famílias e dinâmica de formar grupos e "pagar"','Voz','',10),
+      PR('MELHOR SEREM DOIS QUE UM','Ricardo Lebedenco',20,'todas juntas'),
+    ]),
+
+    P('Peleia','Atrás da tapera, abaixo da moita de taquara','Prédica',{km:0.3,aclive:'',modal:'pe',min:10},[
+      PR('LUTAR DE JOELHOS','Romulo Lobo',30,'juntos — peleia',[
+        ['LOGÍSTICA','Levar corda e caixa de som; instalar caixas de som e luzes. Ao terminar, 30 min para levar a caixa de som ao Madeiro.',''],
+        ['SEGURANÇA','Sair 10 min antes para sinalizar a subida até o Madeiro.','Subida ao Madeiro'],
+        ['CHEFES/SUB','Versículos para chefes, subs e motivadores.',''],
+        ['HAKUNA','Avaliar enfermos antes da caminhada.',''],
+      ]),
+    ]),
+
+    P('Madeiro','Trilha da Sargenta até o Meio Mundo (Capitel de N. Sra. de Schoenstatt)','Prédica',{km:0.83,aclive:164,modal:'pe',min:30},[
+      PR('TOME A SUA CRUZ','Alan',20,'juntos',[['LOGÍSTICA','Levar o madeiro ao local (eucaliptos: Hugo Brondani, ~25 pedaços de 14 cm).','Porteira do Douglas']]),
+      A('Entrega','Recebem o madeiro na porteira (início da propriedade do Douglas)','CT e Sub','"pegue a sua cruz e suba até o altar"',10,[['CHEFES/SUB','Já posicionados para os versículos do madeiro.','Ao longo da subida']]),
+    ],[],'Proprietário: Douglas.'),
+
+    P('Cruz / Meio Mundo','Descampado no açude — tem luz elétrica','Prédica',{km:0.32,aclive:30,modal:'pe',min:10},[
+      PR('VOCÊ DEU TUDO DE SI?','Cleryston',10,'juntos',[['LOGÍSTICA','Montar a cruz, caixas de som, louvor. Preparar fogueira.','Açude']]),
+      PR("OFEREÇA TUDO O QUE TEM","Cleryston",10,"juntos — entrega dos MRE's, água",[['LOGÍSTICA',"Entrega dos MRE's e água.",'']]),
+      A('Outro','Sessão Ventilador — testemunhos entre eles','Alan Rieger','no descampado',10,[['CHEFES/SUB','Ouvem e anotam testemunhos marcantes.','']]),
+    ]),
+
+    P('Ponte de Val Feltrina','Ponte com o letreiro — antes das primeiras casas','Outro',{km:2.65,aclive:16,modal:'pe',min:30,obs:'sobe até o Meio Mundo e desce a trilha das Massas'},[
+      A('Formação','Alinhar as famílias em bloco na curva antes das primeiras casas','Voz','',5,[
+        ['VOZ','Fechar a estrada ao iniciar (tem residências). Pedir para desligarem as luzes.','Curva antes das casas'],
+        ['TODOS OS LGND','Esperar as famílias próximo à ponte com o letreiro.','Ponte'],
+        ['LOGÍSTICA','FOGOS em cima da ponte (local aberto, longe de árvores e fios). Letreiro luminoso de LED. Verificar se dá.','Ponte'],
+      ]),
+      A('Outro','Discurso do Legendário — só passa a ponte quem é Legendário','Romulo Lobo','',15),
+      A('Entrega','Entrega das camisas','Chefes / sub-chefes','',15,[['CHEFES/SUB','Entregam as camisas (demais legendários podem ajudar).','']]),
+    ]),
+
+    P('Sociedade de Val Feltrina — Jantar do Rei','','Refeição',{km:0.3,aclive:'',modal:'pe',min:10},[
+      PR('PARAFRASEANDO SALMO 23','Isaac Lebedenco',15,'juntos — convite para o Jantar do Rei'),
+      A('Refeição','Jantar do Rei','','',60,[
+        ['COZINHA','Jantar do Rei (contato da Sociedade: Marlene).','Salão'],
+        ['VOZ','Servir a primeira rodada de batatas. Após o jantar, juntar todos e levar de uma vez ao acampamento.',''],
+      ]),
+    ]),
+
+    P('Acampamento 2 — dormir','Senderistas no D2; legendários atrás da Sociedade','Acampamento',{km:0.5,aclive:'',modal:'pe',min:15},[
+      A('Dormir','Dormir','','CT/Sub e hakuna acampam com os senderistas',445,[
+        ['PATRON','6:00 acordar os vozes; 6:30 café dos legendários e desmontar barracas.',''],
+        ['COZINHA','Café dos legendários 6:30.',''],
+      ]),
+      A('Alvorada','Alvorada senderistas — formação','Voz','mochilas ficam no acampamento (se chover descem com elas)',20),
+      A('Outro','Desmontar barracas e caminhar até a Sociedade para o café','Voz','',10),
+    ]),
+
+    P('Sociedade de Val Feltrina — café e encerramento','','Prédica',{km:0.5,aclive:'',modal:'pe',min:10},[
+      A('Refeição','Café dos senderistas','','',15,[['COZINHA','Café dos senderistas.','Salão']]),
+      PR('REVOLUÇÃO (por que do nome)','Cleryston',15,'juntos'),
+      PR('PASSANDO O BASTÃO','Romulo Lobo',20,'função Voz, liberação de perdão, oração pela equipe, história dos legendários; testemunhos; avisos: almoço/bonés, caminhão PIB SM → IBC, não divulgar a pista'),
+      A('Entrega','Patch aos legendários que serviram e ex-senderistas (+ brasão da pista)','Coordenadores / CT / Sub','Fernando Colle',10),
+    ]),
+
+    P('Acampamento 2 — fotos e embarque','Campo atrás da Sociedade','Embarque',{km:0.3,aclive:'',modal:'pe',min:10},[
+      A('Outro','Fotos: Hino Nacional, bandeiras hasteadas, todos formando o "RS"','Mídia','drone não identificar a Sociedade',40,[
+        ['LOGÍSTICA','Caixa de som para o Hino Nacional.',''],
+        ['MÍDIA','Conduz e chama para as fotos.',''],
+      ]),
+      A('Embarque','Caminhões vão até a Sociedade — embarcar','Voz','',30,[['VOZ','Formação e embarque.','']]),
+    ],[],'Caminhões chegam 9:30.'),
+
+    P('Val de Buia','Salão da Capela São João','Refeição',{km:'',aclive:'',modal:'caminhao',min:45,obs:'https://maps.app.goo.gl/TpjkBFa7LfFgFst28'},[
+      A('Outro','Premiações / competições / entrega do boné','Rômulo','pegar o boné e ir direto para a fila do almoço',60,[['EVENTOS','Premiações e entrega dos bonés.','']]),
+      A('Refeição','Almoço','','',75,[['COZINHA','Almoço de encerramento.','']]),
+    ]),
+
+    P('PIB SM','Primeira Igreja Batista de Santa Maria','Base',{km:29.6,aclive:'',modal:'caminhao',min:30,obs:'https://maps.app.goo.gl/F5uAcXQmhByGbb2j6 · Val de Buia > PIB SM'},[
+      A('Outro','Desembarque no subsolo / banheiros','Voz','',30,[
+        ['LOGÍSTICA','Mochilas alinhadas no estacionamento (ex-senderistas e legendários).','Estacionamento'],
+        ['EVENTOS','Organizar os espaços na PIB SM (Cleryston).','Templo'],
+      ]),
+      A('Outro','Início do culto (mulheres e crianças); música para a entrada dos legendários','','',15,[['CHEFES/SUB','Entrega dos pertences pessoais recolhidos no início.','']]),
+      A('Outro','Entrada dos legendários no templo','Voz','',45),
+      A('Outro','Fim do culto','','caminhão fica até 15:30 para ir à IBC (falar com o Toríbio)',0),
+    ]),
+  ]};
+}
+
+/* ============================================================ */
+renderMeta(); render();
+</script>
+</body>
+</html>
